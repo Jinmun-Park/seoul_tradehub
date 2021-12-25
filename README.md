@@ -26,19 +26,21 @@
 
 ### [출저]
 #### 1. API
-| PLAN &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| DATE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
+| 주소 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 설명 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | --- | --- |
-| 서울데이터 | [서울 열린데이터] |
+| [서울 열린데이터] | 서울특별시 빅데이터 플랫폼 |
 
 #### 2. 데이터
-| PLAN &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| DATE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
+| 종류 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 출저 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | --- | --- |
-| ㅁㅁ| ㅁㅁ |
-#### 정의 
+| 상권데이터 | [서울 열린데이터] |
+| 공연주차장 | [서울 열린데이터] |
+| 병원인허가 | [서울 열린데이터] |
+| 어린이보호구역 | [서울 열린데이터] |
+
+#### 데이터 정의 
 - 상주인구 : "서울시 주민등록주소 기반으로 작성한 인구수" 
 - 생활인구 : "서울시와 KT가 공공빅데이터와 통신데이터를 이용하여 작성한 서울의 특정지역, 특정시점에 존재하는 인구수" 
 - 직장인구는 : "국민건강보험공단 직장건강보험 가입자의 직장주소 기반으로 작성한 인구수"
 
 [서울 열린데이터]:http://data.seoul.go.kr/dataList/datasetList.do
-
-코로나 시기 한국의 골목상권(mom and pop stores)에 대한 통계분석. 공공데이터 API를 활용하여 예측모델을 개발하고 대시보드 구축.

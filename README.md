@@ -28,15 +28,19 @@
 #### 1. API
 | 주소 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 설명 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | --- | --- |
-| [서울 열린데이터] | 서울특별시 빅데이터 플랫폼 |
+| 서울특별시 빅데이터 플랫폼 | [서울 열린데이터] |
+| 한국행정구역코드 | [한국빅데이터] |
 
 #### 2. 데이터
-| 종류 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 출저 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
-| --- | --- |
-| 상권데이터 | [서울 열린데이터] |
-| 공연주차장 | [서울 열린데이터] |
-| 병원인허가 | [서울 열린데이터] |
-| 어린이보호구역 | [서울 열린데이터] |
+| 이름 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 출저 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 파일이름 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
+| --- | --- | --- |
+| 상권데이터 | [서울 열린데이터] | 상권_데이터이름 |
+| 공연주차장 | [서울 열린데이터] | 상권_데이터이름 |
+| 병원인허가 | [서울 열린데이터] | 상권_데이터이름 |
+| 어린이보호구역 | [서울 열린데이터] | 상권_데이터이름 |
+| 건축물대장 법정동 코드정보 | [공공데이터포탈] | 병합<행정구역_종합코드> |
+| 상권분석서비스(상권영역) | [서울 열린데이터] | 병합<행정구역_종합코드> |
+| 한국행정구역코드 | [한국빅데이터] | 병합<행정구역_종합코드> |
 
 #### 데이터 정의 
 - 상주인구 : "서울시 주민등록주소 기반으로 작성한 인구수" 
@@ -44,3 +48,5 @@
 - 직장인구는 : "국민건강보험공단 직장건강보험 가입자의 직장주소 기반으로 작성한 인구수"
 
 [서울 열린데이터]:http://data.seoul.go.kr/dataList/datasetList.do
+[한국빅데이터]:https://www.bigdata-environment.kr/
+[공공데이터포탈]:https://www.data.go.kr/data/15049340/fileData.do

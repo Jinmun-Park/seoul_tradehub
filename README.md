@@ -1,4 +1,6 @@
 # 서울시 상권별 매출 분석 및 예측, 어플리케이션 프로젝트
+### [프로젝트 리포트]
+모든 상권데이터에 대한 데이터분석은 [VELOG]에 작성하였습니다
 
 ### [프로젝트 목적]
 '서울 열린데이터 광장' 에서 추출한 상권 데이터와 주변 지역 시설 데이터를 활용하여, 
@@ -50,3 +52,4 @@
 [서울 열린데이터]:http://data.seoul.go.kr/dataList/datasetList.do
 [한국빅데이터]:https://www.bigdata-environment.kr/
 [공공데이터포탈]:https://www.data.go.kr/data/15049340/fileData.do
+[VELOG]:https://velog.io/@data_park

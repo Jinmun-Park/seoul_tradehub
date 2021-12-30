@@ -17,7 +17,7 @@ def select_columns(data, names):
 
     return output
 
-def covert_float_int(data, columns):
+def convert_float_int(data, columns):
    """
    Converting float to int type
    """
@@ -34,22 +34,22 @@ def setup_code():
     행정동코드 = pd.read_csv('data/행정동코드.csv')
 
     # 2. DROP COLUMN FIELDS
-    상권_영역 = 상권_영역.drop(['상권_코드_명','상권_구분_코드','상권_구분_코드_명', '형태정보'], axis=1)
+    상권_영역 = 상권_영역.drop(['기준_년월_코드','상권_코드_명','상권_구분_코드','상권_구분_코드_명', '형태정보'], axis=1)
     행정동코드 = select_columns(data=행정동코드, names=['시도', '시군구', '행정구역명', '행정동(행정기관명)', '법정동', '행정구역코드', '행정동_코드', '법정동코드'])
     행정동코드 = 행정동코드.drop_duplicates(subset=['행정동_코드'])
 
     # 3. CHANGE TYPE 'FLOAT' TO 'INT"
-    상권_영역 = covert_float_int(data=상권_영역, columns=['기준_년월_코드', '상권_코드', '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드'])
-    data_y = covert_float_int(data=행정동코드, columns=['행정구역코드', '행정동_코드', '법정동코드'])
+    상권_영역 = convert_float_int(data=상권_영역, columns=['상권_코드', '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드'])
+    data_y = convert_float_int(data=행정동코드, columns=['행정구역코드', '행정동_코드', '법정동코드'])
 
     # 4. DATA MERGE
     행정동코드['행정동_코드'] = (행정동코드['행정동_코드']/100).fillna(0).astype(int)
-    output = covert_float_int(data=상권_영역.merge(data_y, how='left', on=['행정동_코드']), columns=['행정구역코드', '행정동_코드', '법정동코드'])
+    output = convert_float_int(data=상권_영역.merge(data_y, how='left', on=['행정동_코드']), columns=['행정구역코드', '행정동_코드', '법정동코드'])
 
     # output = '종합코드'
     return output
 
-#------------------------DATA PREPROCESSING FUNCTION ----------------------#
+#------------------------ DATA PREPROCESSING FUNCTION ----------------------#
 
 def column_space(data):
     """
@@ -83,10 +83,4 @@ def setup_tradehub(file):
 
     return output
 
-상권_상주인구 = setup_tradehub('상권_상주인구.csv')
-상권_생활인구 = setup_tradehub('상권_생활인구.csv')
-상권_아파트 = setup_tradehub('상권_아파트.csv')
-상권_점포 = setup_tradehub('상권_점포.csv')
-상권_직장인구 = setup_tradehub('상권_직장인구.csv')
-상권_집객시설 = setup_tradehub('상권_집객시설.csv')
-상권_추정매출 = setup_tradehub('상권_추정매출.csv')
+

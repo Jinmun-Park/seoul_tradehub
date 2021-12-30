@@ -17,7 +17,7 @@ def select_columns(data, names):
 
     return output
 
-def covert_float_int(data, columns):
+def convert_float_int(data, columns):
    """
    Converting float to int type
    """
@@ -39,17 +39,17 @@ def setup_code():
     행정동코드 = 행정동코드.drop_duplicates(subset=['행정동_코드'])
 
     # 3. CHANGE TYPE 'FLOAT' TO 'INT"
-    상권_영역 = covert_float_int(data=상권_영역, columns=['상권_코드', '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드'])
-    data_y = covert_float_int(data=행정동코드, columns=['행정구역코드', '행정동_코드', '법정동코드'])
+    상권_영역 = convert_float_int(data=상권_영역, columns=['상권_코드', '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드'])
+    data_y = convert_float_int(data=행정동코드, columns=['행정구역코드', '행정동_코드', '법정동코드'])
 
     # 4. DATA MERGE
     행정동코드['행정동_코드'] = (행정동코드['행정동_코드']/100).fillna(0).astype(int)
-    output = covert_float_int(data=상권_영역.merge(data_y, how='left', on=['행정동_코드']), columns=['행정구역코드', '행정동_코드', '법정동코드'])
+    output = convert_float_int(data=상권_영역.merge(data_y, how='left', on=['행정동_코드']), columns=['행정구역코드', '행정동_코드', '법정동코드'])
 
     # output = '종합코드'
     return output
 
-#------------------------DATA PREPROCESSING FUNCTION ----------------------#
+#------------------------ DATA PREPROCESSING FUNCTION ----------------------#
 
 def column_space(data):
     """

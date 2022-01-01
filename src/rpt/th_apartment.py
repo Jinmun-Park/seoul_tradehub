@@ -53,7 +53,7 @@ plt.show();
 # 003 : [EDA : LINE] Quarter View Plot, Category by Region
 시군구_아파트 = 상권_아파트.groupby(['시군구','분기_코드']).agg(아파트_단지_수=('아파트_단지_수','sum'), 아파트_평균_면적=('아파트_평균_면적','sum'), 아파트_평균_시가=('아파트_평균_시가','sum')).reset_index()
 
-#아파트 단지 수 시각화
+# 아파트 단지 수 시각화
 ax = sns.lineplot(x='분기_코드',
              y='아파트_단지_수',
              hue='시군구',
@@ -65,7 +65,7 @@ plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
 plt.show();
 
-#아파트 평균 면적 시각화
+# 아파트 평균 면적 시각화
 ax = sns.lineplot(x='분기_코드',
              y='아파트_평균_면적',
              hue='시군구',
@@ -77,7 +77,7 @@ plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
 plt.show();
 
-#아파트 평균 시가 시각화
+# 아파트 평균 시가 시각화
 ax = sns.lineplot(x='분기_코드',
              y='아파트_평균_시가',
              hue='시군구',

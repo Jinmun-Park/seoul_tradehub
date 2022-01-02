@@ -6,8 +6,45 @@ import json
 from pyproj import Transformer, CRS
 # Tradehub data load and setup
 from src.setup.setup import select_columns, setup_tradehub
+# Directory path and pickle setup
+import os
+from datetime import datetime
+import pickle
 
 #------------------------------- SET UP -------------------------------#
+
+def pickle_replace(name, file):
+    """
+    DESCRIPTION 1 : Creating Path and Pickle file if these are not existing.
+    DESCROPTION 2 : If Pickle file is already existing in your directory, then it will be replaced with new pickle files.
+    USAGE : Most API Calls in this project will use 'pickle_replace' function to store the dataframe in pickle format.
+    """
+    # Create pickle directory path if it does not exist
+    try:
+        if not os.path.exists('pickle/'):
+            try:
+                os.makedirs('pickle')
+            except FileExistsError:
+                pass
+    except Exception as e:
+        print('Failed to create directory (pickle/..) ' + name.upper() + e.__str__())
+    else:
+        print('Successfully created directory (pickle/..) ' + name.upper())
+    # Create pickle file if the file is not existing (If the file exist, then write it again)
+    try:
+        if os.path.exists('pickle/' + name + '.pkl'):
+            with open('pickle/' + name + '.pkl', 'wb') as f:
+                pickle.dump(file, f)
+        else:
+            file.to_pickle('pickle/' + name + '.pkl')
+    except Exception as e:
+        print('Failed to export(.pkl) ' + name.upper() + e.__str__())
+    else:
+        print('Successfully export(.pkl) ' + name.upper())
+
+def read_pickle(file_name: str) -> pd.DataFrame:
+    return pd.read_pickle('pickle/' + file_name)
+
 def tradehub_data_load():
     """
     DESCRIPTION 1 : Load trade hub data and filtering the fields before modelling
@@ -75,13 +112,33 @@ def conversion_axes(transformer, data):
 
     # Mapping the address using Latitude and Longitude
     df_address = pd.DataFrame()
-    for x, y in zip(상권_아파트['x'], 상권_아파트['y']):
+    for x, y in zip(상권_아파트['x'][0:5000], 상권_아파트['y'][0:5000]):
         df_address = df_address.append([map_address(key='65265d19337c32168628d36054955392', x_axis=x, y_axis=y)], ignore_index=True)
-    print('End')
 
+    df_address = pd.DataFrame()
+    print(datetime.now())
+    for x, y in zip(상권_아파트['x'][5000:20000], 상권_아파트['y'][5000:20000]):
+        df_address = df_address.append([map_address(key='65265d19337c32168628d36054955392', x_axis=x, y_axis=y)],
+                                       ignore_index=True)
+    print(datetime.now())
+
+
+    # Replace Pickle
+    pickle_replace(name='상권_아파트_5000_20000', file=df_address)
+
+    # Merge
+
+    # Change Column after the merge
     df_address = df_address.rename(columns={0: '도로명_주소'})
 
+    for i in range(0,10):
+        print(i)
+    for i in range(10,20):
+        print(i)
+
     return df_address
+
+
 
 #----------------------------- DATA LOAD -----------------------------#
 
@@ -93,3 +150,4 @@ a = [map_address(key='65265d19337c32168628d36054955392', x_axis='127.04318987696
 df_address = df_address.append(a, ignore_index=True)
 df_address = df_address.rename(columns={0: '도로명_주소'})
 '''
+

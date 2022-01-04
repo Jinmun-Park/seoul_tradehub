@@ -4,12 +4,15 @@ import requests
 import json
 # Converting X,Y axes into Latitude, Longitude
 from pyproj import Transformer, CRS
-# Tradehub data load and setup
+# Trade hub data load and setup
 from src.setup.setup import select_columns, setup_tradehub
 # Directory path and pickle setup
 import os
 from datetime import datetime
 import pickle
+
+# Load cleaned data
+from src.rpt.carpark import carpark_data_load
 
 #------------------------------- SET UP -------------------------------#
 
@@ -45,10 +48,10 @@ def pickle_replace(name, file):
 def read_pickle(file_name: str) -> pd.DataFrame:
     return pd.read_pickle('pickle/' + file_name)
 
-def tradehub_data_load():
+def data_load(data_name):
     """
-    DESCRIPTION 1 : Load trade hub data and filtering the fields before modelling
-
+    DESCRIPTION 1 : Load cleaned data for mapping
+    AVAILABILITY : '공연주차장', '상권_아파트'
     """
     상권_아파트 = setup_tradehub('상권_아파트.csv')
     상권_아파트 = select_columns(data=상권_아파트, names=['기준_년_코드', '기준_분기_코드', '분기_코드', '상권_구분_코드_명', '상권_코드_명',
@@ -87,14 +90,13 @@ def axes_setup():
 
     return transformer
 
-def conversion_axes(transformer, data):
+def run_xy_convert(api, transformer, data):
     """
-    DESCRIPTION :
+    DESCRIPTION : Running
 
     """
-
     # Load pre-processed trade hub data
-    상권_아파트 = tradehub_data_load()
+    상권_아파트 = data_load()
 
     # Converting X,Y axes into Latitude and Longitude
     df = pd.DataFrame(columns=['x', 'y'])
@@ -107,47 +109,29 @@ def conversion_axes(transformer, data):
         df_output = pd.DataFrame(x_y_output).transpose().rename(columns={0: 'x', 1: 'y'})
         df = df.append(df_output, ignore_index=True)
 
-    # Data merge
+    # Merge new x,y coordinate
     상권_아파트 = pd.merge(상권_아파트, df, left_index=True, right_index=True)
 
     # Mapping the address using Latitude and Longitude
     df_address = pd.DataFrame()
-    for x, y in zip(상권_아파트['x'][0:5000], 상권_아파트['y'][0:5000]):
-        df_address = df_address.append([map_address(key='65265d19337c32168628d36054955392', x_axis=x, y_axis=y)], ignore_index=True)
-
-    df_address = pd.DataFrame()
-    print(datetime.now())
-    for x, y in zip(상권_아파트['x'][5000:20000], 상권_아파트['y'][5000:20000]):
-        df_address = df_address.append([map_address(key='65265d19337c32168628d36054955392', x_axis=x, y_axis=y)],
+    print('카카오 API epsg5181에서 wgs84변환중 : ' + str(datetime.now()))
+    for x, y in zip(상권_아파트['x'], 상권_아파트['y']):
+        df_address = df_address.append([map_address(key=api, x_axis=x, y_axis=y)],
                                        ignore_index=True)
-    print(datetime.now())
+    print('카카오 API wgs84 변환완료 : ' + str(datetime.now()))
 
-
-    # Replace Pickle
-    pickle_replace(name='상권_아파트_5000_20000', file=df_address)
-
-    # Merge
-
-    # Change Column after the merge
+    # Merge the address field
     df_address = df_address.rename(columns={0: '도로명_주소'})
+    상권_아파트 = pd.merge(상권_아파트, df_address, left_index=True, right_index=True)
+    상권_아파트 = 상권_아파트.drop(['엑스좌표_값', '와이좌표_값'], axis=1)
 
-    for i in range(0,10):
-        print(i)
-    for i in range(10,20):
-        print(i)
+    # EXPORT & READ PICKLE ---------------------------------------------------------#
+    pickle_replace(name='상권_아파트', file=df_address)
+    pickle_output = read_pickle('youtube_popular.pkl')
 
-    return df_address
+    return pickle_output
 
 
 
 #----------------------------- DATA LOAD -----------------------------#
-
-'''
-map_address(key='65265d19337c32168628d36054955392', x_axis='127.1086228', y_axis='37.4012191')
-
-a = [map_address(key='65265d19337c32168628d36054955392', x_axis=상권_아파트['x'][500], y_axis=상권_아파트['y'][500])]
-a = [map_address(key='65265d19337c32168628d36054955392', x_axis='127.04318987696023', y_axis='37.58011691623963')]
-df_address = df_address.append(a, ignore_index=True)
-df_address = df_address.rename(columns={0: '도로명_주소'})
-'''
 

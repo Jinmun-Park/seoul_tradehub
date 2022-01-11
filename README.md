@@ -8,24 +8,24 @@
 모든 상권 데이터에 대한 데이터 분석 리포트는 [VELOG]에 작성하였습니다.
 
 ### [프로젝트 참여원]
+- 전민수 : - 
 - 박진문 : pjm9827@gmail.com
 - 박은정 : pej111797@gmail.com
-- 전민수 : - 
 
 ### [프로젝트 진행 계획]
 #### 1. 분석 리포트 작성 
 | PLAN &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| DATE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| STATUS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | --- | --- | --- |
-| 데이터 맵핑 | 31'DEC'2021 | IN PROGRESS |
-| EDA 리포트 | 7'JAN'2022 | IN PROGRESS |
-| 모델링 | 14'JAN'2022 | IN PROGRESS |
-| 최종 리포트 | 18'JAN'2022 | IN PROGRESS |
+| 데이터 맵핑 | 31'DEC'2021 | COMPLETED |
+| EDA 리포트 | 15'JAN'2022 | IN PROGRESS |
+| 모델링 | 21'JAN'2022 | IN PROGRESS |
+| 최종 리포트 | 31'JAN'2022 | IN PROGRESS |
 
 #### 2. 모바일 어플리케이션
 | PLAN &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| DATE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| STATUS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | --- | --- | --- |
-| FLASK 앱 | 31'JAN'2021 | IN PROGRESS |
-| AWS | 10'FEB'2022 | IN PROGRESS |
+| FLASK 앱 | 15'FEB'2021 | IN PROGRESS |
+| AWS | 25'FEB'2022 | IN PROGRESS |
 
 ### [프로젝트 데이터] 
 #### 1. 데이터 출처

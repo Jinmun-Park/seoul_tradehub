@@ -8,7 +8,7 @@ import seaborn as sns
 import pandas as pd
 
 # Setup
-font_name = font_manager.FontProperties(fname="src/gulim.ttc").get_name()
+font_name = font_manager.FontProperties(fname="src/BMDOHYEON_ttf.ttf").get_name()
 plt.rc('font', family=font_name)
 matplotlib.rcParams['axes.unicode_minus'] = False
 
@@ -42,21 +42,21 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 
 fig, (ax1,ax2) = plt.subplots(2,1)
 ax1.plot(분기별_직장인구['분기_코드'], 분기별_직장인구['총_직장_인구_수'])
-ax1.set_title("분기별 직장인구(만명)", fontsize=15)
-ax1.set_ylabel('직장인구(만명)')
+ax1.set_title("분기별 직장인구(만)", fontsize=13)
+ax1.set_ylabel('직장인구(만)')
 ax1.grid(linewidth=0.3)
-ax1.axvline(x='2020Q1', color='darkred', linestyle='--')
+#ax1.axvline(x='2020Q1', color='darkred', linestyle='--')
 ax2.plot(분기별_직장인구['분기_코드'], 분기별_직장인구['남성_직장_인구_수'], label='남성 직장인구')
 ax2.plot(분기별_직장인구['분기_코드'], 분기별_직장인구['여성_직장_인구_수'], label='여성 직장인구')
-ax2.set_title("분기별 남성 & 여성 직장인구(만명)", fontsize=15)
-ax2.set_ylabel('직장인구(만명)')
+ax2.set_title("분기별 남성 & 여성 직장인구(만)", fontsize=13)
+ax2.set_ylabel('직장인구(만)')
 ax2.grid(linewidth=0.3)
-ax2.axvline(x='2020Q1', color='darkred', linestyle='--')
+#ax2.axvline(x='2020Q1', color='darkred', linestyle='--')
 
 plt.setp(ax1.get_xticklabels(), rotation=45)
 plt.setp(ax2.get_xticklabels(), rotation=45)
 fig.subplots_adjust(wspace=0.2, hspace=0.5)
-fig.suptitle('분기별 직장인구(만명)', fontsize=20)
+fig.suptitle('분기별 직장인구(만)', fontsize=20)
 plt.legend(loc="upper right")
 plt.show()
 
@@ -84,6 +84,7 @@ plt.title('구별 총 직장 인구 수', fontsize=20)
 plt.ylabel('총 직장 인구 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 남성 직장 인구 수 시각화
@@ -96,6 +97,7 @@ plt.title('구별 남성 직장 인구 수', fontsize=20)
 plt.ylabel('남성 직장 인구 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 여성 직장 인구 수 시각화
@@ -108,6 +110,7 @@ plt.title('구별 여성 직장 인구 수', fontsize=20)
 plt.ylabel('여성 직장 인구 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 004 : [EDA : BAR] Category by Region

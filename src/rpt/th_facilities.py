@@ -7,7 +7,7 @@ import matplotlib
 import seaborn as sns
 
 # Setup
-font_name = font_manager.FontProperties(fname="src/gulim.ttc").get_name()
+font_name = font_manager.FontProperties(fname="src/BMDOHYEON_ttf.ttf").get_name()
 plt.rc('font', family=font_name)
 matplotlib.rcParams['axes.unicode_minus'] = False
 

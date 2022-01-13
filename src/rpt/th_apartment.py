@@ -8,7 +8,7 @@ import seaborn as sns
 import pandas as pd
 
 # Setup
-font_name = font_manager.FontProperties(fname="src/gulim.ttc").get_name()
+font_name = font_manager.FontProperties(fname="src/BMDOHYEON_ttf.ttf").get_name()
 plt.rc('font', family=font_name)
 matplotlib.rcParams['axes.unicode_minus'] = False
 
@@ -32,7 +32,7 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 상권_아파트 = setup_tradehub('상권_아파트.csv')
 
 # 002 : [EDA : LINE] Total Quarter View Plot
-분기별_아파트 = 상권_아파트.groupby(['기준_년_코드','기준_분기_코드','분기_코드']).agg(아파트_단지_수=('아파트_단지_수','sum'),아파트_평균_시가=('아파트_평균_시가', 'sum')).reset_index()
+분기별_아파트 = 상권_아파트.groupby(['기준_년_코드','기준_분기_코드','분기_코드']).agg(아파트_단지_수=('아파트_단지_수','sum'),아파트_평균_시가=('아파트_평균_시가', 'mean')).reset_index()
 분기별_아파트['아파트_평균_시가'] = 분기별_아파트['아파트_평균_시가']/100000000
 
 fig, (ax1,ax2) = plt.subplots(2,1)
@@ -40,12 +40,12 @@ ax1.plot(분기별_아파트['분기_코드'], 분기별_아파트['아파트_�
 ax1.set_title("분기별 아파트 평균 시가(억)", fontsize=15)
 ax1.set_ylabel('아파트 시가(억)')
 ax1.grid(linewidth=0.3)
-ax1.axvline(x='2020Q1', color='darkred', linestyle='--')
+# ax1.axvline(x='2020Q1', color='darkred', linestyle='--')
 ax2.plot(분기별_아파트['분기_코드'], 분기별_아파트['아파트_단지_수'])
 ax2.set_title("아파트 단지 수", fontsize=15)
 ax2.set_ylabel('단지 수')
 ax2.grid(linewidth=0.3)
-ax2.axvline(x='2020Q1', color='darkred', linestyle='--')
+# ax2.axvline(x='2020Q1', color='darkred', linestyle='--')
 
 plt.setp(ax1.get_xticklabels(), rotation=45)
 plt.setp(ax2.get_xticklabels(), rotation=45)

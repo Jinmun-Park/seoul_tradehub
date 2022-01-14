@@ -15,14 +15,13 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 빅데이터_상권_분석 : 상권_집객시설
 분석 결과 1 : 
 분기별로 집객시설 확인한 결과, 2017 Q4 급격한 상승 이후, 2018Q1 ~ 2021Q1 데이터는 전혀 변화가 없으며, 2021Q2에 급격히 감소한 형태 -> 과연 신뢰할 수 있는 데이터인가? 
-집객시설별로 확인한 결과, 2016Q3에 버스 정거장 수가 급격히 감소, 2017Q1에 일반 병원 수가 급격히 상승하고 2021Q2에 급격히 하락함
-분석 결과 2 : 구별로 확인한 결과, 
-총 집객시설 수 : 강남구, 중구, 종로구 많음, 도봉구, 노원구, 강북구 적음
-관공서_수 : 강남구 2018Q1 급격히 상승
-은행_수 : 2021Q2에 전체적으로 하락하는 형태
-일반_병원_수: 2018Q1에 전체적으로 상승하고, 2021Q2에 전체적으로 하락하는 형태
-유치원_수: 2021Q2에 하락하는 형태, 집계되지 않은 데이터가 많음
-초등학교_수, 중학교_수, 고등학교_수, 종합병원_수, 철도_역_수 등 : 집계되지 않은 데이터가 많음
+집객시설별로 확인한 결과, 2016 3분기에 버스 정거장 수가 급격히 감소하고, 2017 1분기에 숙박시설 수가 급격히 증가하고 2021 2분기에 급격히 감소함
+분석 결과 2 : 구별로 전체 확인한 결과, 
+총 집객시설 수 : 강남구>중구>종로구 많음, 강북구<노원구<도봉구 적음
+구별로 집객시설별로 확인한 결과, 
+관공서_수 : 2016년 1분기에 급격하게 상승 후, 2018년 1분기에 또 급격하게 상승
+은행_수 : 2017 1분기에 전체적으로 조금 하락하고, 2021 2분기에 조금 하락하는 형태
+유치원_수, 초등학교_수, 중학교_수, 고등학교_수, 종합병원_수, 철도_역_수 등: 집계되지 않은 데이터가 많음
 """
 
 # 001 : Data Load
@@ -45,15 +44,15 @@ fig, (ax1,ax2) = plt.subplots(2,1)
 ax1.plot(분기별_집객시설['분기_코드'], 분기별_집객시설['집객시설_수']/10000, label='집객시설_수')
 ax1.set_title("분기별 집객시설 수(만)", fontsize=20)
 ax1.set_xlabel('분기')
-ax1.set_ylabel('수(만)')
+ax1.set_ylabel('집객시설 수(만)')
 ax1.grid(linewidth=0.3)
-ax1.axvline(x='2020Q1', color='darkred', linestyle='--')
+#ax1.axvline(x='2020Q1', color='darkred', linestyle='--')
 ax2.plot(분기별_집객시설['분기_코드'],  분기별_집객시설['집객시설_합계']/10000, label='집객시설_합계')
 ax2.set_title("분기별 집객시설 합계(만)", fontsize=20)
 ax2.set_xlabel('분기')
-ax2.set_ylabel('수(만)')
+ax2.set_ylabel('집객시설 수(만)')
 ax2.grid(linewidth=0.3)
-ax2.axvline(x='2020Q1', color='darkred', linestyle='--')
+#ax2.axvline(x='2020Q1', color='darkred', linestyle='--')
 
 fig.subplots_adjust(wspace=0.2, hspace=0.5)
 plt.setp(ax1.get_xticklabels(), rotation=45)
@@ -81,12 +80,12 @@ ax.plot(분기별_집객시설['분기_코드'], 분기별_집객시설['철도_
 ax.plot(분기별_집객시설['분기_코드'], 분기별_집객시설['버스_터미널_수'], label='버스_터미널_수')
 ax.plot(분기별_집객시설['분기_코드'], 분기별_집객시설['지하철_역_수'], label='지하철_역_수')
 ax.plot(분기별_집객시설['분기_코드'], 분기별_집객시설['버스_정거장_수'], label='버스_정거장_수')
-ax.set_title("분기별 집객시설 모음", fontsize=20)
+ax.set_title("분기별 집객시설별 집객시설 수", fontsize=20)
 ax.set_xlabel('분기')
-ax.set_ylabel('수')
+ax.set_ylabel('각 집객시설 수')
 ax.grid(linewidth=0.3)
-plt.axvline(x='2020Q1', color='darkred', linestyle='--')
-plt.text('2019Q4',1,'COVID19', rotation=90, color='darkred')
+#plt.axvline(x='2020Q1', color='darkred', linestyle='--')
+#plt.text('2019Q4',1,'COVID19', rotation=90, color='darkred')
 plt.xticks(rotation=45)
 plt.legend(loc="upper right")
 plt.show();
@@ -111,6 +110,7 @@ plt.title('구별 집객 시설 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 관공서 수 시각화
@@ -123,6 +123,7 @@ plt.title('구별 관공서 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 은행 수 시각화
@@ -135,6 +136,7 @@ plt.title('구별 은행 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 종합병원 수 시각화
@@ -147,6 +149,7 @@ plt.title('구별 종합병원 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 일반병원 수 시각화
@@ -159,6 +162,7 @@ plt.title('구별 일반병원 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 약국 수 시각화
@@ -171,6 +175,7 @@ plt.title('구별 약국 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 유치원 수 시각화
@@ -183,6 +188,7 @@ plt.title('구별 유치원 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 초등학교 수 시각화
@@ -195,6 +201,7 @@ plt.title('구별 초등학교 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 중학교 수 시각화
@@ -207,6 +214,7 @@ plt.title('구별 중학교 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 고등학교 수 시각화
@@ -219,6 +227,7 @@ plt.title('구별 고등학교 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 대학교 수 시각화
@@ -231,6 +240,7 @@ plt.title('구별 대학교 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 백화점 수 시각화
@@ -243,6 +253,7 @@ plt.title('구별 백화점 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 슈퍼마켓 수 시각화
@@ -255,6 +266,7 @@ plt.title('구별 슈퍼마켓 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 극장 수 시각화
@@ -267,6 +279,7 @@ plt.title('구별 극장 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 숙박 시설 수 시각화
@@ -279,6 +292,7 @@ plt.title('구별 숙박시설 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 공항 수 시각화
@@ -291,6 +305,7 @@ plt.title('구별 공항 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 철도역 수 시각화
@@ -303,6 +318,7 @@ plt.title('구별 철도역 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 버스터미널 수 시각화
@@ -315,6 +331,7 @@ plt.title('구별 버스터미널 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 지하철역 수 시각화
@@ -327,6 +344,7 @@ plt.title('구별 지하철역 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 버스정거장 수 시각화
@@ -339,6 +357,7 @@ plt.title('구별 버스정거장 수', fontsize=20)
 plt.ylabel('집객 시설 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 004 : [EDA : BAR] Category by Region
@@ -346,7 +365,7 @@ plt.show();
 시군구_집객시설2 = 시군구_집객시설2.sort_values(by=['집객시설_수'], ascending=True)
 시군구_집객시설2 = 시군구_집객시설2.set_index('시군구')
 
-# 아파트 단지 수 시각화
+# 집객시설 수 시각화
 my_colors = ['#fcd5ce', '#e8e8e4', '#ffd7ba']
 plt.barh(시군구_집객시설2.index, 시군구_집객시설2['집객시설_수'], color=my_colors)
 plt.title('구별 집객시설 수', fontsize=18)

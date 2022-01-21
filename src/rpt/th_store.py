@@ -14,23 +14,35 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 
 """
 빅데이터_상권_분석 : 상권_점포
-분석 결과 1 : 2019Q1부터 데이터 존재. 중요한 데이터. 하지만 예)한식음식점이 증가하는 것이 유동인구 혹은 골목상권에 어떠한 영향이 있을까?
+분석 결과 1: 분기별 점포 수를 확인한 결과, 코로나 시기인 2020Q1에 급격히 하락하는 모습을 보임
+분기별 프랜차이즈 점포 수를 확인한 결과, 2017Q3 ~ 2019Q3까지 지속적으로 하락하다가 2019Q4에 급격하게 상승한 이후 2020Q1에 조금 하락하는 형태를 보임
+분기별 개업 수 & 폐업 수를 확인한 결과, 
+개업 수: 2017Q4에 급격하게 하락하고, 코로나 시기인 2020Q1에 하락
+폐업 수: 2017Q1에 폐업 점포 수가 가장 많고, 2018Q1과 2020Q1이 많음
 
-질문 1 : 분기별 점포수는 코로나 이후 얼마 줄었을까? 폐업과 같이 확인
-그래프 1 [2019-2021 분기별 점포수] : 코로나시기에 증가하는 점포수. 하지만 2020Q1이후로 줄어드는 트렌드.
+분석 결과 2 : 구별로 확인한 결과, 
+총 점포수 : 중구>강남구>종로구>서초구>송파구 순으로 많고, 강북구<노원구<도봉구<서대문구<중랑구가 적음
+프랜차이즈 점포 수 : 강남구>중구>서초구>송파구>종로구 순으로 많고, 강북구<도봉구<노원구<중랑구<성동구가 적음, 강남구가 현저히 많음
+개업 점포 수 : 강남구>중구>마포구>서초구>종로구 순으로 많고, 강북구<노원구<도봉구<서대문구<중랑구가 적음, 강남구, 중구는 2017년 4분기에 급격히 하락
+폐업 점포 수 : 중구>강남구>서초구>종로구>마포구 순으로 많고, 강북구<노원구<도봉구<서대문구<성동구가 적음
 
-질문 2 : 상위 15 점포의 변화는 어떨까 ?
-[상위15 서비스업종별 점포 & 프랜차이즈 수] [서비스업종별 상위15 점포 & 프랜차이즈 수] :
-첫벗째, 점포수 & 프랜차이즈 점포수는 크게 눈에띄게 하락하지 않았다.
-두번째, 눈에 띄지않지만 줄어드는 개업점포수와 2020Q2 이후 증가하는 폐업수. 코로나의 영향이라 할수 있을만함 움직임.
-세번째, 코로나 기간인 2020Q1 상위 15 서비스업종에서 보이는 폐업수
+분석 결과 3 : 상권별로 확인한 결과,
+점포 수: 동대문패션타운 관광특구>남대문 북창동 다동 무교통 관광특구>종로청계 관광특구>홍익대학교 주변>남대문시장 순으로 많고, 푸른터시장<박미시장<양남시장<번동시장 등이 적음
+프랜차이즈 점포 수: 남대문 북창동 다동 무교통 관광특구>홍익대학교 주변>강남역>명동거리>신촌역 순으로 많고, 양남시장, 번동시장, 천호대로12길, 신정2동골목시장, 천호대로45길 등이 없음
+개업 점포 수: 동대문패션타운 관광특구>홍익대학교 주변>남대문 북창동 다동 무교통 관광특구>신사동 가로수길>강남역 순으로 많고, 양남시장, 상계시장, 동부청과시장, 번동시장, 푸른터시장 등이 없음
+폐업 점포 수: 동대문패션타운 관광특구>남대문 북창동 다동 무교통 관광특구>홍익대학교 주변>종로청계 관광특구>신사동 가로수길 순으로 많고, 유영시장, 푸른터시장, 용두시장, 신곡종합시장, 양남시장 등이 적음
 
-질문 3 : y-axis의 차이로 질문2에 대한 답변이 여러운관계로 %Change.
-그래프 4 & 5 [점포수 기준 상위 15 서비스업종 폐업점포 수 (%Change)]:
--전자상거래업 12퍼센트 상승
--일반교습학원 10퍼센트상승
--호프간이주점 7퍼센트 상승
--분식전문점 5퍼센트 하락
+분석 결과 4 : 서비스 업종 별로 확인한 결과,
+점포 수가 많은 서비스 업종 상위 15: 일반의류>한식음식점>부동산중개업>화장품>미용실>호프간이주점>슈퍼마켓>커피음료>분식전문점>전자상거래업>컴퓨터 및 주변 장치 판매>반찬가게>일반의원>노래방>일반교습학원
+상위 15 서비스 업종별 점포 수 & 프랜차이즈 점포 수 : 
+점포 수를 확인한 결과, 일반의류와 한식음식점의 점포 수는 꾸준히 많았으며, 한식 음식점의 경우 2020년 1분기에 감소하는 형태를 보임
+프랜차이즈 점포 수의 경우, 한식 음식점과 커피음료의 점포 수가 꾸준히 많았으며, 최근에는 커피음료 업종의 점포 수가 더 많아짐
+상위 15 서비스 업종별 개업 점포 수 & 폐업 점포 수:
+개업 점포 수를 확인한 결과, 과거에 일반의류가 많았으나 2017년 이후 많이 감소하는 형태이며 지금까지 꾸준히 감소하고 있고, 한식음식점의 개업 점포 수는 꾸준히 많음
+폐업 점포 수의 경우, 일반의류와 한식음식점이 꾸준히 많으며 최근에는 한식음식점이 더 많은 것을 알 수 있음
+상위 15 서비스 업종별 점포 수 (전분기 대비 % Change): 
+점포 수를 전분기 대비 퍼센트 변화로 확인해본 결과, 코로나 사태가 터진 2020년 1분기에 일반교습학원, 전자상거래업, 호프간이주점을 제외한 전 업종이 다 하락하는 형태 보임
+특히 슈퍼마켓이 가장 많이 하락, 다음으로 분식전문점, 커피음료, 한식음식점, 미용실 등이 많이 하락, 다음 분기에는 커피음료, 분식전문점, 슈퍼마켓, 반찬가게, 한식음식점이 전분기 대비 많이 상승
 """
 
 # 001 : Data Load
@@ -76,6 +88,7 @@ ax3.grid(which='minor', linestyle=':', linewidth=0.5)
 
 plt.setp(ax1.get_xticklabels(), rotation=45)
 plt.setp(ax2.get_xticklabels(), rotation=45)
+plt.setp(ax3.get_xticklabels(), rotation=45)
 fig.subplots_adjust(wspace=0.1, hspace=0.4)
 fig.suptitle('분기별 점포수', fontsize=20)
 ax3.legend()
@@ -95,6 +108,7 @@ plt.title('구별 총 점포 수', fontsize=20)
 plt.ylabel('총 점포 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 총 개업 점포 수 시각화
@@ -107,6 +121,7 @@ plt.title('구별 총 개업 점포 수', fontsize=20)
 plt.ylabel('총 개업 점포 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 총 폐업 점포 수 시각화
@@ -119,6 +134,7 @@ plt.title('구별 총 폐업 점포 수', fontsize=20)
 plt.ylabel('총 폐업 점포 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 총 프랜차이즈 점포 수 시각화
@@ -131,6 +147,7 @@ plt.title('구별 총 프랜차이즈 점포 수', fontsize=20)
 plt.ylabel('총 프랜차이즈 점포 수', fontsize=14)
 plt.xlabel('분기', fontsize=14)
 plt.legend(fontsize=12, loc='best')
+plt.xticks(rotation=45)
 plt.show();
 
 # 004 : [EDA : BAR] Category by Region
@@ -183,9 +200,82 @@ plt.xlabel('총 프랜차이즈 점포 수', fontsize=15)
 plt.show();
 
 # 005 : [EDA : BAR] Category by 상권_코드_명
+상권코드_점포 = 상권_점포.groupby(['상권_코드_명']).agg(
+    점포_수=('점포_수', 'sum'),
+    개업_점포_수=('개업_점포_수', 'sum'),
+    폐업_점포_수=('폐업_점포_수', 'sum'),
+    프랜차이즈_점포_수=('프랜차이즈_점포_수', 'sum')
+).reset_index()
 
-# 006 : [EDA : BAR] Category by 업종
+# 상위 10 / 하위 10 점포 수
+top_상권코드_점포수 = 상권코드_점포.sort_values(by=['점포_수'], ascending=False).head(10)
+btm_상권코드_점포수 = 상권코드_점포.sort_values(by=['점포_수'], ascending=False).tail(10)
 
+# 상위 10 / 하위 10 프랜차이즈 점포 수
+top_상권코드_프랜차이즈점포수 = 상권코드_점포.sort_values(by=['프랜차이즈_점포_수'], ascending=False).head(10)
+btm_상권코드_프랜차이즈점포수 = 상권코드_점포.sort_values(by=['프랜차이즈_점포_수'], ascending=False).tail(10)
+
+# 상위 10 / 하위 10 개업 점포 수
+top_상권코드_개업점포수 = 상권코드_점포.sort_values(by=['개업_점포_수'], ascending=False).head(10)
+btm_상권코드_개업점포수 = 상권코드_점포.sort_values(by=['개업_점포_수'], ascending=False).tail(10)
+
+# 상위 10 / 하위 10 폐업 점포 수
+top_상권코드_폐업점포수 = 상권코드_점포.sort_values(by=['폐업_점포_수'], ascending=False).head(10)
+btm_상권코드_폐업점포수 = 상권코드_점포.sort_values(by=['폐업_점포_수'], ascending=False).tail(10)
+
+# 총 점포 수 시각화
+fig, (ax1,ax2) = plt.subplots(1,2)
+ax1.barh(top_상권코드_점포수['상권_코드_명'].astype(str), top_상권코드_점포수['점포_수'], color='blue')
+ax1.grid(True)
+ax1.set_title("상권코드별 상위10 점포 수", fontsize=15)
+ax1.set_ylabel('점포 수')
+ax2.barh(btm_상권코드_점포수['상권_코드_명'].astype(str), btm_상권코드_점포수['점포_수'], color='skyblue')
+ax2.grid(True)
+ax2.set_title("상권코드별 하위10 점포 수", fontsize=15)
+ax2.set_ylabel('점포 수')
+fig.suptitle('상권코드별 상위 10 / 하위 10 점포 수', fontsize=20)
+plt.show(block=True)
+
+# 프랜차이즈 점포 수 시각화
+fig, (ax1,ax2) = plt.subplots(1,2)
+ax1.barh(top_상권코드_프랜차이즈점포수['상권_코드_명'].astype(str), top_상권코드_프랜차이즈점포수['프랜차이즈_점포_수'], color='blue')
+ax1.grid(True)
+ax1.set_title("상권코드별 상위10 프랜차이즈 점포 수", fontsize=15)
+ax1.set_ylabel('프랜차이즈 점포 수')
+ax2.barh(btm_상권코드_프랜차이즈점포수['상권_코드_명'].astype(str), btm_상권코드_프랜차이즈점포수['프랜차이즈_점포_수'], color='skyblue')
+ax2.grid(True)
+ax2.set_title("상권코드별 하위10 프랜차이즈 점포 수", fontsize=15)
+ax2.set_ylabel('프랜차이즈 점포 수')
+fig.suptitle('상권코드별 상위 10 / 하위 10 프랜차이즈 점포 수', fontsize=20)
+plt.show(block=True)
+
+# 개업 점포 수 시각화
+fig, (ax1,ax2) = plt.subplots(1,2)
+ax1.barh(top_상권코드_개업점포수['상권_코드_명'].astype(str), top_상권코드_개업점포수['개업_점포_수'], color='blue')
+ax1.grid(True)
+ax1.set_title("상권코드별 상위10 개업 점포 수", fontsize=15)
+ax1.set_ylabel('개업 점포 수')
+ax2.barh(btm_상권코드_개업점포수['상권_코드_명'].astype(str), btm_상권코드_개업점포수['개업_점포_수'], color='skyblue')
+ax2.grid(True)
+ax2.set_title("상권코드별 하위10 개업 점포 수", fontsize=15)
+ax2.set_ylabel('개업 점포 수')
+fig.suptitle('상권코드별 상위 10 / 하위 10 개업 점포 수', fontsize=20)
+plt.show(block=True)
+
+# 폐업 점포 수 시각화
+fig, (ax1,ax2) = plt.subplots(1,2)
+ax1.barh(top_상권코드_폐업점포수['상권_코드_명'].astype(str), top_상권코드_폐업점포수['폐업_점포_수'], color='blue')
+ax1.grid(True)
+ax1.set_title("상권코드별 상위10 폐업 점포 수", fontsize=15)
+ax1.set_ylabel('폐업 점포 수')
+ax2.barh(btm_상권코드_폐업점포수['상권_코드_명'].astype(str), btm_상권코드_폐업점포수['폐업_점포_수'], color='skyblue')
+ax2.grid(True)
+ax2.set_title("상권코드별 하위10 폐업 점포 수", fontsize=15)
+ax2.set_ylabel('폐업 점포 수')
+fig.suptitle('상권코드별 상위 10 / 하위 10 폐업 점포 수', fontsize=20)
+plt.show(block=True)
+
+# 006 : [EDA : LINE] Category by 서비스_업종_코드_명
 업종별_점포 = 상권_점포.groupby(['기준_년_코드','기준_분기_코드','분기_코드','서비스_업종_코드_명']).agg(
     점포_수=('점포_수', 'sum'),
     개업_점포_수=('개업_점포_수', 'sum'),
@@ -193,58 +283,59 @@ plt.show();
     프랜차이즈_점포_수=('프랜차이즈_점포_수', 'sum')
 ).reset_index()
 
-eda_점포수 = pd.pivot_table(업종별_점포, values = ['점포_수'], index=['서비스_업종_코드_명']).reset_index()
-eda_점포수 = eda_점포수.sort_values(by='점포_수', ascending=False).head(15)
-eda_점포수 = eda_점포수['서비스_업종_코드_명']
+점포수 = pd.pivot_table(업종별_점포, values = ['점포_수'], index=['서비스_업종_코드_명'], aggfunc = ['mean', 'sum']).reset_index()
+점포수.columns = ['서비스_업종_코드_명', '평균', '총합']
+점포수 = 점포수.sort_values(by='총합', ascending=False).head(15)
+점포수 = 점포수['서비스_업종_코드_명']
 
-eda_업종별_점포 = pd.pivot_table(업종별_점포, values = ['점포_수','개업_점포_수','폐업_점포_수','프랜차이즈_점포_수'], index=['서비스_업종_코드_명', '분기_코드']).reset_index()
-eda_업종별_점포 = eda_업종별_점포[eda_업종별_점포['서비스_업종_코드_명'].isin(eda_점포수)]
-eda_업종별_점포['점포_수_pchange'] = eda_업종별_점포.groupby('서비스_업종_코드_명', sort=False)['점포_수'].apply(lambda x: x.pct_change()).to_numpy()
-eda_업종별_점포['개업_점포_수_pchange'] = eda_업종별_점포.groupby('서비스_업종_코드_명', sort=False)['개업_점포_수'].apply(lambda x: x.pct_change()).to_numpy()
-eda_업종별_점포['폐업_점포_수_pchange'] = eda_업종별_점포.groupby('서비스_업종_코드_명', sort=False)['폐업_점포_수'].apply(lambda x: x.pct_change()).to_numpy()
-eda_업종별_점포['프랜차이즈_점포_수_pchange'] = eda_업종별_점포.groupby('서비스_업종_코드_명', sort=False)['프랜차이즈_점포_수'].apply(lambda x: x.pct_change()).to_numpy()
+업종별_점포 = pd.pivot_table(업종별_점포, values = ['점포_수','개업_점포_수','폐업_점포_수','프랜차이즈_점포_수'], index=['서비스_업종_코드_명', '분기_코드']).reset_index()
+업종별_점포 = 업종별_점포[업종별_점포['서비스_업종_코드_명'].isin(점포수)]
 
-# 그래프 2 : 점포수 기준 상위15 서비스업종별 점포 & 프랜차이즈 수
+# 이전 분기 대비 변동률
+# 업종별_점포['점포_수_pchange'] = 업종별_점포.groupby('서비스_업종_코드_명', sort=False)['점포_수'].apply(lambda x: x.pct_change()).to_numpy()
+업종별_점포['점포수_pct_change'] = 업종별_점포.sort_values(['분기_코드']).groupby(['서비스_업종_코드_명']).점포_수.pct_change()
+업종별_점포['개업점포수_pct_change'] = 업종별_점포.sort_values(['분기_코드']).groupby(['서비스_업종_코드_명']).개업_점포_수.pct_change()
+업종별_점포['폐업점포수_pct_change'] = 업종별_점포.sort_values(['분기_코드']).groupby(['서비스_업종_코드_명']).폐업_점포_수.pct_change()
+업종별_점포['프랜차이즈점포수_pct_change'] = 업종별_점포.sort_values(['분기_코드']).groupby(['서비스_업종_코드_명']).프랜차이즈_점포_수.pct_change()
+
+# 상위 15 서비스 업종별 점포 수 & 프랜차이즈 점포 수
 fig, (ax1, ax2) = plt.subplots(2,1)
-ax1.set_title("점포수 기준 상위 15 서비스업종 점포 수", fontsize=15)
+ax1.set_title("상위 15 서비스 업종별 점포 수", fontsize=15)
 ax1.set_xlabel('분기')
-for label, grp in eda_업종별_점포.groupby('서비스_업종_코드_명'):
+for label, grp in 업종별_점포.groupby('서비스_업종_코드_명'):
     grp.plot(x = '분기_코드', y = '점포_수',ax = ax1, label = label, linestyle='-', marker='o')
-ax.legend(loc="upper right", fontsize=7)
-for label, grp in eda_업종별_점포.groupby('서비스_업종_코드_명'):
+ax2.set_title("상위 15 서비스 업종별 프랜차이즈 점포 수", fontsize=15)
+ax2.set_xlabel('분기')
+for label, grp in 업종별_점포.groupby('서비스_업종_코드_명'):
     grp.plot(x = '분기_코드', y = '프랜차이즈_점포_수',ax = ax2, label = label, linestyle='-', marker='o')
 ax1.legend(fontsize=7, loc="upper right")
 ax2.legend(fontsize=7, loc="upper right")
 fig.subplots_adjust(wspace=0.1, hspace=0.4)
-fig.suptitle('점포수 기준 상위15 서비스업종별 점포 & 프랜차이즈 수', fontsize=20)
+fig.suptitle('상위 15 서비스 업종별 점포 수 & 프랜차이즈 점포 수', fontsize=20)
 
-# 그래프 3 : 점포수 기준 서비스업종별 상위15 점포 & 프랜차이즈 수
+# 상위 15 서비스 업종별 개업 점포 수 & 폐업 점포 수
 fig, (ax1,ax2) = plt.subplots(2,1)
-ax1.set_title("점포수 기준 상위15 점포 개업점포 수", fontsize=15)
+ax1.set_title("상위 15 서비스 업종별 개업 점포 수", fontsize=15)
 ax1.set_xlabel('분기')
-for label, grp in eda_업종별_점포.groupby('서비스_업종_코드_명'):
+for label, grp in 업종별_점포.groupby('서비스_업종_코드_명'):
     grp.plot(x = '분기_코드', y = '개업_점포_수',ax = ax1, label = label, linestyle='-', marker='o')
-ax2.set_title("점포수 기준 상위15 점포 폐업 수", fontsize=15)
+ax2.set_title("상위 15 서비스 업종별 폐업 점포 수", fontsize=15)
 ax2.set_xlabel('분기')
-for label, grp in eda_업종별_점포.groupby('서비스_업종_코드_명'):
+for label, grp in 업종별_점포.groupby('서비스_업종_코드_명'):
     grp.plot(x = '분기_코드', y = '폐업_점포_수',ax = ax2, label = label, linestyle='-', marker='o')
 ax1.legend(fontsize=7, loc="upper right")
 ax2.legend(fontsize=7, loc="upper right")
 fig.subplots_adjust(wspace=0.1, hspace=0.4)
-fig.suptitle('점포수 기준 서비스업종별 상위15 점포 & 프랜차이즈 수', fontsize=20)
+fig.suptitle('상위 15 서비스 업종별 개업 점포 수 & 폐업 점포 수', fontsize=20)
 
-# 그래프 4 : 점포수 기준 상위 15 서비스업종 점포수 (%Change)
+# 상위 15 서비스 업종별 점포 수 (%Change)
+# 확인1 = 업종별_점포[업종별_점포['분기_코드']=='2020Q1'].sort_values(by= '점포수_pct_change', ascending=False)
+# 확인2 = 업종별_점포[업종별_점포['분기_코드']=='2020Q2'].sort_values(by= '점포수_pct_change', ascending=False)
 fig, ax = plt.subplots()
-ax.set_title("점포수 기준 상위 15 서비스업종 점포수 (%Change)", fontsize=15)
+ax.set_title("상위 15 서비스 업종별 점포 수 (%Change)", fontsize=15)
 ax.set_xlabel('% Change')
-for label, grp in eda_업종별_점포.groupby('서비스_업종_코드_명'):
-    grp.plot(x = '분기_코드', y = '점포_수_pchange',ax = ax, label = label, linestyle='-', marker='o')
+for label, grp in 업종별_점포.groupby('서비스_업종_코드_명'):
+    grp.plot(x = '분기_코드', y = '점포수_pct_change',ax = ax, label = label, linestyle='-', marker='o')
 ax.legend(loc="upper right", fontsize=7)
 
-# 그래프 5 : 점포수 기준 상위 15 서비스업종 폐업점포 수 (%Change)
-fig, ax = plt.subplots()
-ax.set_title("점포수 기준 상위 15 서비스업종 폐업점포 수 (%Change)", fontsize=15)
-ax.set_xlabel('% Change')
-for label, grp in eda_업종별_점포.groupby('서비스_업종_코드_명'):
-    grp.plot(x = '분기_코드', y = '폐업_점포_수_pchange',ax = ax, label = label, linestyle='-', marker='o')
-ax.legend(loc="upper right", fontsize=7)
+

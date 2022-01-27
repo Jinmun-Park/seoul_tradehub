@@ -72,6 +72,20 @@ plt.show();
 상권_아파트_1920 = 상권_아파트_1920.sort_values(by='아파트 단지 수 차이', ascending=False)
 상권_아파트_1920 = 상권_아파트_1920.sort_values(by='아파트 평균 시가 차이', ascending=False)
 
+# pct change로 확인해보기 _ 상권별 (이전 분기 대비 변동률)
+아파트_pct = 상권_아파트[상권_아파트['분기_코드'].str.contains("2019Q4|2020Q1")]
+아파트_pct = 아파트_pct.groupby(['기준_년_코드','기준_분기_코드','분기_코드','상권_코드_명']).agg(아파트_단지_수=('아파트_단지_수','sum'),아파트_평균_시가=('아파트_평균_시가', 'mean')).reset_index()
+
+아파트_pct['아파트_pct_change_상권'] = 아파트_pct.sort_values(['분기_코드']).groupby(['상권_코드_명']).아파트_평균_시가.pct_change()
+아파트_pct = 아파트_pct.sort_values(by='아파트_pct_change_상권', ascending=False)
+
+# pct change로 확인해보기 _ 구별
+아파트_pct = 상권_아파트[상권_아파트['분기_코드'].str.contains("2019Q4|2020Q1")]
+아파트_pct = 아파트_pct.groupby(['기준_년_코드','기준_분기_코드','분기_코드','시군구']).agg(아파트_단지_수=('아파트_단지_수','sum'),아파트_평균_시가=('아파트_평균_시가', 'mean')).reset_index()
+
+아파트_pct['아파트_pct_change_시군구'] = 아파트_pct.sort_values(['분기_코드']).groupby(['시군구']).아파트_평균_시가.pct_change()
+아파트_pct = 아파트_pct.sort_values(by='아파트_pct_change_시군구', ascending=False)
+
 # 003 : [EDA : LINE] Quarter View Plot, Category by Region
 시군구_아파트 = 상권_아파트.groupby(['시군구','분기_코드']).agg(아파트_단지_수=('아파트_단지_수','sum'), 아파트_평균_면적=('아파트_평균_면적','mean'), 아파트_평균_시가=('아파트_평균_시가','mean')).reset_index()
 

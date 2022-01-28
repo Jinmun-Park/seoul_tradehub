@@ -1,5 +1,4 @@
-from src.setup.setup import setup_tradehub
-
+from src.setup.setup import select_columns, setup_tradehub
 from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib import font_manager, rc
@@ -11,6 +10,9 @@ import pandas as pd
 font_name = font_manager.FontProperties(fname="src/BMDOHYEON_ttf.ttf").get_name()
 plt.rc('font', family=font_name)
 matplotlib.rcParams['axes.unicode_minus'] = False
+
+#------------------------------- SET UP -------------------------------#
+
 
 """
 빅데이터_상권_분석 : 상권_아파트

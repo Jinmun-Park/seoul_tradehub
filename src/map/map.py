@@ -2,6 +2,7 @@
 import pandas as pd
 import requests
 import json
+import numpy as np
 # Converting X,Y axes into Latitude, Longitude
 from pyproj import Transformer, CRS
 # Trade hub data load and setup
@@ -12,7 +13,18 @@ from datetime import datetime
 import pickle
 
 # Load cleaned data
-from src.rpt.carpark import carpark_data_load
+from src.rpt.carpark import 공영주차장_data_load
+from src.rpt.cultural import 문화공간정보_data_load
+#----------------------------- DATA LOAD -----------------------------#
+def 아파트_data_load():
+    """
+    DESCRIPTION 1 : Load cleaned data for mapping
+    AVAILABILITY : '공연주차장', '상권_아파트'
+    """
+    상권_아파트 = setup_tradehub('상권_아파트.csv')
+    상권_아파트 = select_columns(data=상권_아파트, names=['기준_년_코드', '기준_분기_코드', '분기_코드', '상권_구분_코드_명', '상권_코드_명',
+                                                '아파트_평균_면적', '아파트_평균_시가', '시도', '시군구', '법정동', '엑스좌표_값', '와이좌표_값'])
+    return 상권_아파트
 
 #------------------------------- SET UP -------------------------------#
 
@@ -48,30 +60,53 @@ def pickle_replace(name, file):
 def read_pickle(file_name: str) -> pd.DataFrame:
     return pd.read_pickle('pickle/' + file_name)
 
-def data_load(data_name):
-    """
-    DESCRIPTION 1 : Load cleaned data for mapping
-    AVAILABILITY : '공연주차장', '상권_아파트'
-    """
-    상권_아파트 = setup_tradehub('상권_아파트.csv')
-    상권_아파트 = select_columns(data=상권_아파트, names=['기준_년_코드', '기준_분기_코드', '분기_코드', '상권_구분_코드_명', '상권_코드_명',
-                                                '아파트_평균_면적', '아파트_평균_시가', '시도', '시군구', '법정동', '엑스좌표_값', '와이좌표_값'])
-
-    return 상권_아파트
-
 #key = '65265d19337c32168628d36054955392'
+#address = '서울특별시 종로구 관훈동 196-10'
+def map_axes(key, address):
+    """
+    DESCRIPTION 1 : Collecting 'x_좌표' and 'y_좌표' using map address(지번)
+    DESCRIPTION 2 : Please note that the address is using '지번'.
+    REFERENCE : https://blog.daum.net/geoscience/1436
+    """
+    url = 'https://dapi.kakao.com/v2/local/search/address.json?&query={}'.format(address)
+    api_key = 'KakaoAK ' + key
+    headers = {"Authorization": api_key}
+    try:
+        api_test = requests.get(url, headers=headers)
+        url_text = json.loads(api_test.text)
+        if url_text['documents'][0]['road_address'] is None:
+            output_address = url_text['documents'][0]['address']['address_name']
+            output_x = url_text['documents'][0]['address']['x']
+            output_y = url_text['documents'][0]['address']['y']
+        else:
+            output_address = url_text['documents'][0]['road_address']['address_name']
+            output_x = url_text['documents'][0]['road_address']['x']
+            output_y = url_text['documents'][0]['road_address']['y']
+    except:
+        output_address = np.nan
+        output_x = np.nan
+        output_y = np.nan
+
+    return output_address, output_x, output_y
+
 def map_address(key, x_axis, y_axis):
     """
     DESCRIPTION 1 : Search map address using 'x_좌표' and 'y_좌표'.
-    DESCRIPTION 2 : Please note that it is not latitude and longitude
+    DESCRIPTION 2 : Please note that it is not latitude and longitude. (wgs84)
     REFERENCE : https://mentha2.tistory.com/176
     """
-    key = 'KakaoAK ' + key
+    api_key = 'KakaoAK ' + key
     url = 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x={}&y={}'.format(x_axis, y_axis)
-    headers = {"Authorization": key}
-    api_test = requests.get(url, headers=headers)
-    url_text = json.loads(api_test.text)
-    output = url_text['documents'][0]['address_name']
+    headers = {"Authorization": api_key}
+    try:
+        api_test = requests.get(url, headers=headers)
+        url_text = json.loads(api_test.text)
+        output = url_text['documents'][0]['address_name']
+    except ValueError as ve:
+        print(str(x_axis) + ' and ' + str(y_axis) + ':' + ve)
+        output = '좌표 미확인'
+    except:
+        output = '좌표 미확인'
 
     return output
 
@@ -90,48 +125,86 @@ def axes_setup():
 
     return transformer
 
-def run_xy_convert(api, transformer, data):
+def run_xy_convert(api_key, data_load, pickle_name):
     """
     DESCRIPTION : Running
 
     """
     # Load pre-processed trade hub data
-    상권_아파트 = data_load()
+    if data_load == '아파트':
+        data = 아파트_data_load()
+    elif data_load == '문화공간':
+        data = 문화공간정보_data_load()
+    else:
+        data = 공영주차장_data_load()
 
     # Converting X,Y axes into Latitude and Longitude
     df = pd.DataFrame(columns=['x', 'y'])
     transformer = axes_setup()
 
     # Loop converting X,Y axes columns
-    for x, y in zip(상권_아파트['엑스좌표_값'], 상권_아파트['와이좌표_값']):
+    for x, y in zip(data['엑스좌표_값'], data['와이좌표_값']):
         # 001 : Transform X,Y into Latitude and Longitude
         x_y_output = transformer.transform(x, y)
         df_output = pd.DataFrame(x_y_output).transpose().rename(columns={0: 'x', 1: 'y'})
         df = df.append(df_output, ignore_index=True)
 
     # Merge new x,y coordinate
-    상권_아파트 = pd.merge(상권_아파트, df, left_index=True, right_index=True)
+    data = pd.merge(data, df, left_index=True, right_index=True)
 
     # Mapping the address using Latitude and Longitude
     df_address = pd.DataFrame()
     print('카카오 API epsg5181에서 wgs84변환중 : ' + str(datetime.now()))
-    for x, y in zip(상권_아파트['x'], 상권_아파트['y']):
-        df_address = df_address.append([map_address(key=api, x_axis=x, y_axis=y)],
+    for x, y in zip(data['x'], data['y']):
+        df_address = df_address.append([map_address(key=api_key, x_axis=x, y_axis=y)],
                                        ignore_index=True)
     print('카카오 API wgs84 변환완료 : ' + str(datetime.now()))
 
     # Merge the address field
-    df_address = df_address.rename(columns={0: '도로명_주소'})
-    상권_아파트 = pd.merge(상권_아파트, df_address, left_index=True, right_index=True)
-    상권_아파트 = 상권_아파트.drop(['엑스좌표_값', '와이좌표_값'], axis=1)
+    df_address = df_address.rename(columns={0: '추출_주소'})
+    data = pd.merge(data, df_address, left_index=True, right_index=True)
+    data = data.drop(['엑스좌표_값', '와이좌표_값'], axis=1)
 
     # EXPORT & READ PICKLE ---------------------------------------------------------#
-    pickle_replace(name='상권_아파트', file=df_address)
-    pickle_output = read_pickle('youtube_popular.pkl')
+    pickle_replace(name=pickle_name, file=data)
+    pickle_output = read_pickle(pickle_name + '.pkl')
 
     return pickle_output
 
+def run_xy_wo_convert(api_key, data_load, pickle_name):
+    """
+    DESCRIPTION : Running
 
+    """
+    # Load pre-processed trade hub data
+    if data_load == '아파트':
+        data = 아파트_data_load()
+    elif data_load == '문화공간':
+        data = 문화공간정보_data_load()
+    else:
+        data = 공영주차장_data_load()
+
+    # Mapping the address using Latitude and Longitude
+    df_address = pd.DataFrame()
+    print('카카오 API epsg5181에서 wgs84변환중 : ' + str(datetime.now()))
+    for x, y in zip(data['x'], data['y']):
+        df_address = df_address.append([map_address(key=api_key, x_axis=x, y_axis=y)],
+                                       ignore_index=True)
+    print('카카오 API wgs84 변환완료 : ' + str(datetime.now()))
+
+    # Merge the address field
+    df_address = df_address.rename(columns={0: '추출_주소'})
+    data = pd.merge(data, df_address, left_index=True, right_index=True)
+
+    # EXPORT & READ PICKLE ---------------------------------------------------------#
+    pickle_replace(name=pickle_name, file=data)
+    pickle_output = read_pickle(pickle_name + '.pkl')
+
+    return pickle_output
 
 #----------------------------- DATA LOAD -----------------------------#
+#문화공간 = run_xy_wo_convert(api_key='65265d19337c32168628d36054955392', data_load='문화공간', pickle_name='문화공간')
+공연주차장 = read_pickle('공연주차장' + '.pkl')
+#공연주차장 = 공연주차장.rename(columns={'지번_주소': '추출_주소'})
+#pickle_replace(name='공연주차장', file=공연주차장)
 

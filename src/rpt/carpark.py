@@ -4,7 +4,7 @@ import pandas as pd
 from src.setup.setup import select_columns, convert_float_int, column_space
 #------------------------------- SET UP -------------------------------#
 
-def carpark_data_load():
+def 공영주차장_data_load():
     """
     DESCRIPTION 1 : Data preprocessing and the dataframe will be used in data mapping process.
     """
@@ -21,12 +21,10 @@ def carpark_data_load():
     # Select columns and rename
     공영주차장 = select_columns(data=공영주차장, names=['주차장코드', '주소', '법정동', '총 주자면', '기본 주차 요금', '기본 주차 시간(분 단위)',
                                               '추가 단위 요금', '주차장 위치 좌표 위도', '주차장 위치 좌표 경도'])
-    공영주차장 = 공영주차장.rename(columns={'주차장 위치 좌표 위도': '주차장_x'})
+    공영주차장 = 공영주차장.rename(columns={'주차장 위치 좌표 위도': 'y', '주차장 위치 좌표 경도': 'x'})
 
     # Remove Column spaces
     output = column_space(공영주차장)
 
     return output
-
-
 

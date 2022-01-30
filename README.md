@@ -17,9 +17,9 @@
 | PLAN &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| DATE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| STATUS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | --- | --- | --- |
 | 데이터 맵핑 | 31'DEC'2021 | COMPLETED |
-| EDA 리포트 | 15'JAN'2022 | IN PROGRESS |
-| 모델링 | 21'JAN'2022 | IN PROGRESS |
-| 최종 리포트 | 31'JAN'2022 | IN PROGRESS |
+| EDA 리포트 | 30'JAN'2022 | IN PROGRESS |
+| 모델링 | 21'FEB'2022 | IN PROGRESS |
+| 최종 리포트 | 15'MAR'2022 | IN PROGRESS |
 
 #### 2. 모바일 어플리케이션
 | PLAN &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| DATE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| STATUS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|

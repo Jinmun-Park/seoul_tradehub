@@ -3,8 +3,8 @@
 import pandas as pd
 import numpy as np
 from src.setup.setup import select_columns, column_space
-
-from src.map.map import map_axes
+# Kakao API
+from src.map.map import map_axes, axes_setup, pickle_replace, read_pickle
 #------------------------------- SET UP -------------------------------#
 
 def run_adrapi(api_key, key_address):
@@ -12,15 +12,18 @@ def run_adrapi(api_key, key_address):
     DESCRIPTION 1 : Uses 'map_axes' function. It collects 'x_좌표' and 'y_좌표' using map address(지번)
     DESCRIPTION 2 : Cut the word in -n sequence till we can collect either '지번주소' or '도로명주소'
     """
-    n = -1
+    n = 0
     while True:
         n -= 1
         address = ' '.join(key_address.split()[:n])
         if pd.notnull(map_axes(key=api_key, address=address)[0]):
             a, b, c = map_axes(key=api_key, address=address)
+            print(a, b, c)
             break
         elif len(address) == 0:
-            a, b, c = np.nan
+            a = np.nan
+            b = np.nan
+            c = np.nan
             break
 
     return a, b, c
@@ -48,10 +51,12 @@ def adjust_space(address):
             space_whitespace = i+1
 
     # Apply the spaces to adjust the address
-    if whitespace == 0:
+    if whitespace == 0 and space_whitespace > 0:
         output = address[:space_whitespace + 1] + ' ' + address[space_whitespace + 1:]
-    elif space_whitespace == 0:
+    elif whitespace > 0 and space_whitespace == 0:
         output = address[:whitespace + 1] + ' ' + address[whitespace + 1:]
+    elif whitespace == 0 and space_whitespace == 0:
+        output = address
     else:
         output = address[:whitespace + 1] + ' ' + address[whitespace + 1:]
         output = output[:space_whitespace + 1] + ' ' + output[space_whitespace + 1:]
@@ -96,22 +101,53 @@ def 병원_data_load():
         else:
             map_address.loc[index, '입력주소'] = adjust_space(address=value)
 
-    # Merge
-    #병원 = pd.merge(병원, map_address, left_index=True, right_index=True)
-
-    #
-    '''
+    # Extracting new address, x and y axis
     for index, value in enumerate(map_address['입력주소']):
         # Ignore the null values
         if pd.isnull(value):
             continue
         # Convert the pre-defined address to readable address that KAKAO API can read.
         else:
-            #추출_주소, x, y = run_adrapi(api_key='65265d19337c32168628d36054955392', key_address=value)
+            추출_주소, x, y = run_adrapi(api_key='65265d19337c32168628d36054955392', key_address=value)
             map_address.loc[index, '추출_주소'] = 추출_주소
             map_address.loc[index, 'x'] = x
             map_address.loc[index, 'y'] = y
     print('Completed filling in the address using x,y axes')
 
-   return output
-    '''
+    # Insert back into the fields
+    for i in range(len(병원)):
+        if pd.isnull(병원['x'][i]) and pd.isnull(병원['도로명주소'][i]):
+            병원['도로명주소'].loc[i] = map_address.loc[i, '입력주소']
+            병원['x'].loc[i] = map_address.loc[i, 'x']
+            병원['y'].loc[i] = map_address.loc[i, 'y']
+        elif pd.isnull(병원['x'][i]) and pd.isnull(병원['상세주소'][i]):
+            병원['상세주소'].loc[i] = map_address.loc[i, '입력주소']
+            병원['x'].loc[i] = map_address.loc[i, 'x']
+            병원['y'].loc[i] = map_address.loc[i, 'y']
+        elif pd.isnull(병원['x'][i]):
+            병원['x'].loc[i] = map_address.loc[i, 'x']
+            병원['y'].loc[i] = map_address.loc[i, 'y']
+        elif pd.isnull(병원['도로명주소'][i]) and pd.notnull(병원['x'][i]):
+            병원['도로명주소'].loc[i] = 병원.loc[i, '상세주소']
+        elif pd.isnull(병원['상세주소'][i]) and pd.notnull(병원['x'][i]):
+            병원['상세주소'].loc[i] = 병원.loc[i, '도로명주소']
+
+    # Converting X,Y axes from espg5181 into wgs84
+    transformer = axes_setup()
+    # Loop converting X,Y axes columns
+    for i in range(len(병원)):
+        if float(병원['x'].loc[i]) < 200 and float(병원['y'].loc[i]) < 40:
+            continue
+        else:
+            # Converting the axes
+            x_y_output = transformer.transform(병원['x'].loc[i], 병원['y'].loc[i])
+            df_output = pd.DataFrame(x_y_output).transpose().rename(columns={0: 'x', 1: 'y'})
+            # Replace epsg5181 with wgs84 in the dataframe
+            병원['x'].loc[i] = df_output['x'][0]
+            병원['y'].loc[i] = df_output['y'][0]
+
+    #병원 = pd.merge(병원, map_address, left_index=True, right_index=True)
+    pickle_replace(name='병원', file=병원)
+    pickle_output = read_pickle(병원 + '.pkl')
+
+    return pickle_output

@@ -143,6 +143,7 @@ def run_xy_convert(api_key, data_load, pickle_name):
     transformer = axes_setup()
 
     # Loop converting X,Y axes columns
+    print('카카오 API epsg5181에서 wgs84변환중 : ' + str(datetime.now()))
     for x, y in zip(data['엑스좌표_값'], data['와이좌표_값']):
         # 001 : Transform X,Y into Latitude and Longitude
         x_y_output = transformer.transform(x, y)
@@ -151,14 +152,14 @@ def run_xy_convert(api_key, data_load, pickle_name):
 
     # Merge new x,y coordinate
     data = pd.merge(data, df, left_index=True, right_index=True)
-
+    print('카카오 API wgs84 변환완료 : ' + str(datetime.now()))
     # Mapping the address using Latitude and Longitude
     df_address = pd.DataFrame()
-    print('카카오 API epsg5181에서 wgs84변환중 : ' + str(datetime.now()))
+    print('카카오 API wgs84에서 주소 추출중 : ' + str(datetime.now()))
     for x, y in zip(data['x'], data['y']):
         df_address = df_address.append([map_address(key=api_key, x_axis=x, y_axis=y)],
                                        ignore_index=True)
-    print('카카오 API wgs84 변환완료 : ' + str(datetime.now()))
+    print('카카오 API 주소 완료 : ' + str(datetime.now()))
 
     # Merge the address field
     df_address = df_address.rename(columns={0: '추출_주소'})

@@ -18,14 +18,14 @@
 | --- | --- | --- |
 | 데이터 맵핑 | 31'DEC'2021 | COMPLETED |
 | EDA 리포트 | 30'JAN'2022 | IN PROGRESS |
-| 모델링 | 21'FEB'2022 | IN PROGRESS |
-| 최종 리포트 | 15'MAR'2022 | IN PROGRESS |
+| 모델링 | 15'FEB'2022 | IN PROGRESS |
+| 최종 리포트 | 25'FEB'2022 | IN PROGRESS |
 
 #### 2. 모바일 어플리케이션
 | PLAN &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| DATE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| STATUS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
 | --- | --- | --- |
-| FLASK 앱 | 15'FEB'2021 | IN PROGRESS |
-| AWS | 25'FEB'2022 | IN PROGRESS |
+| FLASK 앱 | 15'MAR'2021 | IN PROGRESS |
+| AWS | 25'MAR'2022 | IN PROGRESS |
 
 ### [프로젝트 데이터] 
 #### 1. 데이터 출처

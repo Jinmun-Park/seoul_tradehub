@@ -127,8 +127,7 @@ def axes_setup():
 
 def run_xy_convert(api_key, data_load, pickle_name):
     """
-    DESCRIPTION : Running
-
+    DESCRIPTION : Extracting address using wgs84 converter from 'axes_setup'
     """
     # Load pre-processed trade hub data
     if data_load == '아파트':
@@ -174,8 +173,7 @@ def run_xy_convert(api_key, data_load, pickle_name):
 
 def run_xy_wo_convert(api_key, data_load, pickle_name):
     """
-    DESCRIPTION : Running
-
+    DESCRIPTION : Extracting address without converter
     """
     # Load pre-processed trade hub data
     if data_load == '아파트':
@@ -206,6 +204,8 @@ def run_xy_wo_convert(api_key, data_load, pickle_name):
 #----------------------------- DATA LOAD -----------------------------#
 #문화공간 = run_xy_wo_convert(api_key='65265d19337c32168628d36054955392', data_load='문화공간', pickle_name='문화공간')
 공연주차장 = read_pickle('공연주차장' + '.pkl')
+상권_아파트 = read_pickle('상권_아파트' + '.pkl')
+
 #공연주차장 = 공연주차장.rename(columns={'지번_주소': '추출_주소'})
 #pickle_replace(name='공연주차장', file=공연주차장)
 

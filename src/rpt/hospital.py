@@ -146,6 +146,19 @@ def 병원_data_load():
             병원['x'].loc[i] = df_output['x'][0]
             병원['y'].loc[i] = df_output['y'][0]
 
+    병원 = read_pickle('병원' + '.pkl')
+
+    # Fill in missing state field by extracting the state information from the address.
+    state = []
+    state_extract = 병원['도로명주소'].str.split(" ")
+    for i in state_extract:
+        state.append(i[1])
+    # Convert into dataframe
+    state = pd.DataFrame(state, columns=['법정동'])
+    # Insert back into the dataframe
+    병원 = pd.merge(병원, state, left_index=True, right_index=True)
+
+
     #병원 = pd.merge(병원, map_address, left_index=True, right_index=True)
     pickle_replace(name='병원', file=병원)
     pickle_output = read_pickle(병원 + '.pkl')

@@ -36,14 +36,15 @@ def setup_code():
     상권_영역 = 상권_영역.drop(['기준_년월_코드', '상권_구분_코드', '상권_구분_코드_명', '상권_코드_명', '형태정보'], axis=1)
     #행정동코드 = select_columns(data=행정동코드, names=['시도', '시군구', '행정구역명', '행정동(행정기관명)', '법정동', '행정구역코드', '행정동_코드', '법정동코드'])
     #행정동코드 = 행정동코드.drop_duplicates(subset=['행정동_코드'])
-    법정동코드 = select_columns(data=법정동코드, names=['시군구코드', '시도명', '시군구명', '법정동명', '행정동명'])
+    법정동코드 = select_columns(data=법정동코드, names=['시군구코드', '시도명', '시군구명', '법정동명'])
+    법정동코드 = 법정동코드.drop_duplicates(subset=['시군구코드'])
 
     # 3. CHANGE TYPE 'FLOAT' TO 'INT"
     상권_영역 = convert_float_int(data=상권_영역, columns=['상권_코드', '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드'])
     data_y = convert_float_int(data=법정동코드, columns=['시군구코드'])
 
     # 4. DATA MERGE BASED ON '행정동_코드'
-    data_y = data_y.rename(columns={'시군구코드': '시군구_코드'})
+    data_y = data_y.rename(columns={'시군구코드': '시군구_코드', '시군구명': '시군구'})
     output = 상권_영역.merge(data_y, how='left', on=['시군구_코드'])
 
     # output = '종합코드'

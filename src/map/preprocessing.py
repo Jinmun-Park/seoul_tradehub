@@ -91,7 +91,6 @@ test = 시군구_서비스업종_매출[시군구_서비스업종_매출['시군
 
 
 # correlation
-df
 df_corr = df.corr()
 df_corr
 
@@ -102,7 +101,7 @@ fig, ax = plt.subplots(figsize=(15,15))
 mask = np.zeros_like(df_corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)] = True
 
-# 히트맵을 그린다
+# 히트맵
 sns.heatmap(df_corr,
             cmap = 'RdYlBu_r',
             annot = True,   # 실제 값을 표시한다
@@ -112,7 +111,3 @@ sns.heatmap(df_corr,
             vmin = -1,vmax = 1   # 컬러바 범위 -1 ~ 1
            )
 plt.show()
-
-
-import seaborn as sns
-sns.scatterplot(x="", y="", data=df);

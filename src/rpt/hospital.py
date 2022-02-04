@@ -4,7 +4,11 @@ import pandas as pd
 import numpy as np
 from src.setup.setup import select_columns, column_space
 # Kakao API
-from src.map.map import map_axes, axes_setup, pickle_replace, read_pickle
+from src.map.map import map_axes, axes_setup, pickle_replace, read_pickle, map_address, keys
+# Time
+from datetime import datetime
+
+
 #------------------------------- SET UP -------------------------------#
 
 def run_adrapi(api_key, key_address):
@@ -67,6 +71,10 @@ def 병원_data_load():
     """
     DESCRIPTION 1 : Data preprocessing and the dataframe will be used in data mapping process.
     """
+    # 000 : KAKAO API KEY
+    kakao_api = keys()
+
+    # 001 : Data Preprocessing
     # Data load
     병원 = pd.read_csv('data/도로명별_병원인허가.csv')
 
@@ -82,6 +90,7 @@ def 병원_data_load():
     병원['도로명주소'] = 병원['도로명주소'].replace({' +': ' '}, regex=True)
     병원['상세주소'] = 병원['상세주소'].replace({' +': ' '}, regex=True)
 
+    # 002 : Fill in missing values in X,Y axes fields.
     # Running loop to filter out either '지번' or '도로명' that does not contain 'x_좌표' and 'y_좌표'
     map_address = pd.DataFrame(columns=['입력주소', '추출_주소', 'x', 'y'])
     for i in range(len(병원)):
@@ -108,7 +117,7 @@ def 병원_data_load():
             continue
         # Convert the pre-defined address to readable address that KAKAO API can read.
         else:
-            추출_주소, x, y = run_adrapi(api_key='65265d19337c32168628d36054955392', key_address=value)
+            추출_주소, x, y = run_adrapi(api_key=kakao_api, key_address=value)
             map_address.loc[index, '추출_주소'] = 추출_주소
             map_address.loc[index, 'x'] = x
             map_address.loc[index, 'y'] = y
@@ -132,6 +141,7 @@ def 병원_data_load():
         elif pd.isnull(병원['상세주소'][i]) and pd.notnull(병원['x'][i]):
             병원['상세주소'].loc[i] = 병원.loc[i, '도로명주소']
 
+    # 003 : Replacing X,Y axes
     # Converting X,Y axes from espg5181 into wgs84
     transformer = axes_setup()
     # Loop converting X,Y axes columns
@@ -146,21 +156,37 @@ def 병원_data_load():
             병원['x'].loc[i] = df_output['x'][0]
             병원['y'].loc[i] = df_output['y'][0]
 
-    병원 = read_pickle('병원' + '.pkl')
-
+    # 004 : Fill in missing values in '법정동' field.
     # Fill in missing state field by extracting the state information from the address.
     state = []
     state_extract = 병원['도로명주소'].str.split(" ")
     for i in state_extract:
-        state.append(i[1])
+        if i[0] =='서울특별시' or i[0] =='서울시':
+            state.append(i[1])
+        else:
+            state.append(i[0])
     # Convert into dataframe
     state = pd.DataFrame(state, columns=['법정동'])
     # Insert back into the dataframe
     병원 = pd.merge(병원, state, left_index=True, right_index=True)
+    # Replace
+    병원 = 병원.drop(['법정동_x'], axis=1)
+    병원 = 병원.rename(columns={'법정동_y': '법정동'})
 
+    # 005 : Extract common address filed '추출주소' using KAKAO API
+    df_address = pd.DataFrame()
+    print('카카오 API wgs84에서 주소 추출중 : ' + str(datetime.now()))
+    for x, y in zip(병원['x'], 병원['y']):
+        df_address = df_address.append([map_address(key=kakao_api, x_axis=x, y_axis=y)],
+                                       ignore_index=True)
+    print('카카오 API 주소 추출완료 : ' + str(datetime.now()))
 
-    #병원 = pd.merge(병원, map_address, left_index=True, right_index=True)
+    # Merge the address field
+    df_address = df_address.rename(columns={0: '추출_주소'})
+    병원 = pd.merge(병원, df_address, left_index=True, right_index=True)
+
+    # 006 : Pickle export
     pickle_replace(name='병원', file=병원)
-    pickle_output = read_pickle(병원 + '.pkl')
+    pickle_output = read_pickle('병원' + '.pkl')
 
     return pickle_output

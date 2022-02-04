@@ -1,4 +1,4 @@
-#------------------------------- LIBRARY -------------------------------#
+#===================================== LIBRARY =====================================#
 import pandas as pd
 import requests
 import json
@@ -15,7 +15,42 @@ import pickle
 # Load cleaned data
 from src.rpt.carpark import 공영주차장_data_load
 from src.rpt.cultural import 문화공간정보_data_load
-#----------------------------- DATA LOAD -----------------------------#
+
+# Google secret manager
+import os
+import google.cloud.secretmanager as secretmanager #pip install google-cloud-secret-manager
+
+#===================================== DATA LOAD =====================================#
+def secret_manager_setup():
+    """
+    DESCRIPTION : Retrieving Google Secret keys using Google Application Crendentials.json
+    USAGE : Google Application Credentials setup
+    """
+    # GOOGLE CREDENTIALS & SECRET MANAGER
+    project_id = "api-website-333307"
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "config/api-website-333307-2f9aa748b514.json"
+    client = secretmanager.SecretManagerServiceClient()
+    return project_id, client
+
+def get_secrets(secret_request, project_id, client):
+    """
+    DESCRIPTION : Getting keys using 'secret_manager_setup' function
+    USAGE : Google Secret Manager setup
+    """
+    name = f"projects/{project_id}/secrets/{secret_request}/versions/latest"
+    response = client.access_secret_version(name=name)
+    return response.payload.data.decode("UTF-8")
+
+def keys():
+    """
+    DESCRIPTION : Getting Secret Keys using 'secret_manager_setup' and 'get_secrets' functions
+    USAGE : Retrieving keys from Google Secret Manager
+    """
+    # GOOGLE SECRET MANAGER
+    project_id, client = secret_manager_setup()
+    kakao_api = get_secrets("kakao_api", project_id, client)
+    return kakao_api
+
 def 아파트_data_load():
     """
     DESCRIPTION 1 : Load cleaned data for mapping
@@ -26,7 +61,7 @@ def 아파트_data_load():
                                                 '아파트_평균_면적', '아파트_평균_시가', '시도', '시군구', '법정동', '엑스좌표_값', '와이좌표_값'])
     return 상권_아파트
 
-#------------------------------- SET UP -------------------------------#
+#====================================== SET UP ======================================#
 
 def pickle_replace(name, file):
     """
@@ -60,8 +95,6 @@ def pickle_replace(name, file):
 def read_pickle(file_name: str) -> pd.DataFrame:
     return pd.read_pickle('pickle/' + file_name)
 
-#key = '65265d19337c32168628d36054955392'
-#address = '서울특별시 종로구 관훈동 196-10'
 def map_axes(key, address):
     """
     DESCRIPTION 1 : Collecting 'x_좌표' and 'y_좌표' using map address(지번)
@@ -144,7 +177,7 @@ def run_xy_convert(api_key, data_load, pickle_name):
     # Loop converting X,Y axes columns
     print('카카오 API epsg5181에서 wgs84변환중 : ' + str(datetime.now()))
     for x, y in zip(data['엑스좌표_값'], data['와이좌표_값']):
-        # 001 : Transform X,Y into Latitude and Longitude
+        # Transform X,Y into Latitude and Longitude
         x_y_output = transformer.transform(x, y)
         df_output = pd.DataFrame(x_y_output).transpose().rename(columns={0: 'x', 1: 'y'})
         df = df.append(df_output, ignore_index=True)
@@ -158,14 +191,14 @@ def run_xy_convert(api_key, data_load, pickle_name):
     for x, y in zip(data['x'], data['y']):
         df_address = df_address.append([map_address(key=api_key, x_axis=x, y_axis=y)],
                                        ignore_index=True)
-    print('카카오 API 주소 완료 : ' + str(datetime.now()))
+    print('카카오 API 주소 추출완료 : ' + str(datetime.now()))
 
     # Merge the address field
     df_address = df_address.rename(columns={0: '추출_주소'})
     data = pd.merge(data, df_address, left_index=True, right_index=True)
     data = data.drop(['엑스좌표_값', '와이좌표_값'], axis=1)
 
-    # EXPORT & READ PICKLE ---------------------------------------------------------#
+    # Export & read pickle
     pickle_replace(name=pickle_name, file=data)
     pickle_output = read_pickle(pickle_name + '.pkl')
 
@@ -173,7 +206,7 @@ def run_xy_convert(api_key, data_load, pickle_name):
 
 def run_xy_wo_convert(api_key, data_load, pickle_name):
     """
-    DESCRIPTION : Extracting address without converter
+    DESCRIPTION : Extracting address without X,Y axes converter
     """
     # Load pre-processed trade hub data
     if data_load == '아파트':
@@ -185,24 +218,29 @@ def run_xy_wo_convert(api_key, data_load, pickle_name):
 
     # Mapping the address using Latitude and Longitude
     df_address = pd.DataFrame()
-    print('카카오 API epsg5181에서 wgs84변환중 : ' + str(datetime.now()))
+    print('카카오 API wgs84에서 주소 추출중 : ' + str(datetime.now()))
     for x, y in zip(data['x'], data['y']):
         df_address = df_address.append([map_address(key=api_key, x_axis=x, y_axis=y)],
                                        ignore_index=True)
-    print('카카오 API wgs84 변환완료 : ' + str(datetime.now()))
+    print('카카오 API 주소 추출완료 : ' + str(datetime.now()))
 
     # Merge the address field
     df_address = df_address.rename(columns={0: '추출_주소'})
     data = pd.merge(data, df_address, left_index=True, right_index=True)
 
-    # EXPORT & READ PICKLE ---------------------------------------------------------#
+    # Export & read pickle
     pickle_replace(name=pickle_name, file=data)
     pickle_output = read_pickle(pickle_name + '.pkl')
 
     return pickle_output
 
-#----------------------------- DATA LOAD -----------------------------#
-#문화공간 = run_xy_wo_convert(api_key='65265d19337c32168628d36054955392', data_load='문화공간', pickle_name='문화공간')
+#===================================== DATA LOAD =====================================#
+
+# KAKAO API KEY
+kakao_api = keys()
+
+# LOAD DATA
+#문화공간 = run_xy_wo_convert(api_key=kakao_api, data_load='문화공간', pickle_name='문화공간')
 공연주차장 = read_pickle('공연주차장' + '.pkl')
 상권_아파트 = read_pickle('상권_아파트' + '.pkl')
 

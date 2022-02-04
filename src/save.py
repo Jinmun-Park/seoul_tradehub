@@ -1,3 +1,9 @@
+# 노트
+'''
+pip freeze > requirements.txt <br/>
+pip install -r requirements.txt
+'''
+
 # EDA
 import pandas as pd
 from matplotlib import pyplot as plt

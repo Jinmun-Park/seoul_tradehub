@@ -1,5 +1,7 @@
+#===================================== LIBRARY =====================================#
+# data pre-setup
 from src.setup.setup import setup_tradehub
-
+# eda libraries
 from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib import font_manager, rc
@@ -7,12 +9,12 @@ import matplotlib
 import seaborn as sns
 import pandas as pd
 import numpy as np
-
-# Setup
+# eda setup
 font_name = font_manager.FontProperties(fname="src/BMDOHYEON_ttf.ttf").get_name()
 plt.rc('font', family=font_name)
 matplotlib.rcParams['axes.unicode_minus'] = False
 
+#==================================== DATA LOAD ====================================#
 # 상주인구
 상권_상주인구 = setup_tradehub('상권_상주인구.csv')
 상주인구 = 상권_상주인구[[
@@ -60,7 +62,7 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 # 상권_추정매출['서비스_업종_코드_명'].nunique()
 # 상권_점포['서비스_업종_코드_명'].nunique()
 
-# merge
+# 상주인구, 생활인구, 아파트, 점포, 매출 merge
 df = 매출.copy()
 df = pd.merge(df, 점포, how='left', on=['기준_년_코드','기준_분기_코드','상권_코드','상권_코드_명','서비스_업종_코드_명','분기_코드',
                                       '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드', '시도명', '시군구', '법정동명'])
@@ -70,6 +72,15 @@ df = pd.merge(df, 생활인구, how='left', on=['기준_년_코드','기준_분�
                                         '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드', '시도명', '시군구', '법정동명'])
 df = pd.merge(df, 아파트, how='left', on=['기준_년_코드','기준_분기_코드','상권_코드','상권_코드_명','분기_코드',
                                        '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드', '시도명', '시군구', '법정동명'])
+
+#==================================== PREPROCESS ====================================#
+def 아파트_전처리():
+    """
+    DESCRIPTION 1 : '상권_코드_명' 기준으로 '아파트_가격_*_억_세대_수'가 동일하게 '기준_년_코드'에 분배되지 않는것을 확인. (예 : 뱅뱅사거리)
+    DESCRIPTION 2 : '상권_코드_명'을 기준으로, '기준_년_코드'별 '아파트_평균_면적' 차액을 계산. 2014년부터 2020년까지 각 년도평 평균차액을 계산후, 9이상의 수치를 가진 '상권_코드_명'만을 개별적으로 처리.
+    DESCRIPTION 3 : 9이하의 수치를 가진 '상권_코드_명'의 데이터는 '아파트_평균_시가'가 년도별로 납득이 도니는 트렌드를 보이며 변화되었기에, 9이상의 수치를 기준으로 책정.
+    DESCRIPTION 4 : 9이상의  '상권_코드_명'를 필터후, 개별 코드의 '아파트_평균_면적'이 평균미달인 년도를 평균값으로 대입하여 수치 안정화.
+    """
 
 # null = df.isnull().sum()
 # null_시도 = df[df['시도'].isnull()]

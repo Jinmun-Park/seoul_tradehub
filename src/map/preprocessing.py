@@ -14,6 +14,71 @@ font_name = font_manager.FontProperties(fname="src/BMDOHYEON_ttf.ttf").get_name(
 plt.rc('font', family=font_name)
 matplotlib.rcParams['axes.unicode_minus'] = False
 
+#==================================== PREPROCESS ====================================#
+#data = 아파트
+def apart_preprocess(data):
+    """
+    DESCRIPTION 1 : '상권_코드_명' 기준으로 '아파트_가격_*_억_세대_수'가 동일하게 '기준_년_코드'에 분배되지 않는것을 확인. (예 : 뱅뱅사거리)
+    DESCRIPTION 2 : '상권_코드_명'을 기준으로, '기준_년_코드'별 '아파트_평균_면적' 차액을 계산. 2014년부터 2020년까지 각 년도평 평균차액을 계산후, 9이상의 수치를 가진 '상권_코드_명'만을 개별적으로 처리.
+    DESCRIPTION 3 : 9이하의 수치를 가진 '상권_코드_명'의 데이터는 '아파트_평균_시가'가 년도별로 납득이 도니는 트렌드를 보이며 변화되었기에, 9이상의 수치를 기준으로 책정.
+    DESCRIPTION 4 : 9이상의  '상권_코드_명'를 필터후, 개별 코드의 '아파트_평균_면적'이 평균미달인 년도를 평균값으로 대입하여 수치 안정화.
+    """
+
+    # 001 : Create pivot table
+
+    # Selected years : 2019 - 2021
+    l = ['2019Q1', '2019Q2', '2019Q3', '2019Q4', '2020Q1', '2020Q2', '2020Q3', '2020Q4','2021Q1', '2021Q2', '2021Q3']
+    ls = ['상권_코드_명', '2019Q1', '2019Q2', '2019Q3', '2019Q4', '2020Q1', '2020Q2', '2020Q3', '2020Q4', '2021Q1', '2021Q2', '2021Q3']
+    # Group by : preprocessing purpose
+    pre_apart = data.groupby(['분기_코드', '상권_코드', '상권_코드_명']).agg(
+        아파트_평균_면적=('아파트_평균_면적', 'sum'),
+        아파트_평균_시가=('아파트_평균_시가', 'sum')
+    ).reset_index()
+    # Group by : data mapping purpose
+    pre_info_apart = data.groupby(['상권_코드_명']).agg(lambda x: x.unique()).reset_index()
+    pre_info_apart = pre_info_apart.drop(['분기_코드'], axis=1)
+    # Pivot table : 아파트_평균_시가
+    pivot = pre_apart.pivot(index='상권_코드_명', columns='분기_코드', values='아파트_평균_시가')
+    pivot_table_price = pivot.copy()
+    pivot_table_price.columns = pivot_table_price.columns.values
+    pivot_table_price.reset_index(level=0, inplace=True)
+    # Pivot Table : 아파트_평균_면적
+    pivot = pre_apart.pivot(index='상권_코드_명', columns='분기_코드', values='아파트_평균_면적')
+    pivot_table_sqft = pivot.copy()
+    pivot_table_sqft.columns = pivot_table_sqft.columns.values
+    pivot_table_sqft.reset_index(level=0, inplace=True)
+
+    # 002 : Create average across the years and replace with nan fields
+
+    # Create average column
+    year_index = list(pivot_table_price.columns)
+    year_index.remove('상권_코드_명')
+    pivot_table_price['average'] = pivot_table_price[year_index].mean(axis=1)
+    pivot_table_sqft['average'] = pivot_table_sqft[year_index].mean(axis=1)
+    # Replace with the average if the years are empty
+    for i in l:
+        pivot_table_price[i].fillna(pivot_table_price.average, inplace=True)
+        pivot_table_sqft[i].fillna(pivot_table_sqft.average, inplace=True)
+    # Select 2019 - 2021 fields only
+    pivot_table_price = pivot_table_price[ls]
+    pivot_table_sqft = pivot_table_sqft[ls]
+    # Unpack the pivot
+    pivot_table_price = pd.melt(pivot_table_price, id_vars=['상권_코드_명'], var_name=['분기_코드']).rename(
+        columns={'value': '아파트_평균_시가'}
+    )
+    pivot_table_sqft = pd.melt(pivot_table_sqft, id_vars=['상권_코드_명'], var_name=['분기_코드']).rename(
+        columns={'value': '아파트_평균_면적'}
+    )
+
+    # 003 : Merge with the original dataframe
+
+    # Merge 'pivot_table_price' and 'pivot_table_sqft'
+    pivot_table = pd.merge(pivot_table_price, pivot_table_sqft, how='inner', on=['상권_코드_명', '분기_코드'])
+    # Merge the address fields
+    pivot_table = pd.merge(pivot_table, pre_info_apart, how='left', on=['상권_코드_명'])
+
+    data_merge = pd.merge(data, pivot_table, how='right', on=['상권_코드_명'])
+
 #==================================== DATA LOAD ====================================#
 # 상주인구
 상권_상주인구 = setup_tradehub('상권_상주인구.csv')
@@ -35,7 +100,7 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 아파트 = 상권_아파트[[
      '기준_년_코드', '기준_분기_코드', '상권_코드', '상권_코드_명', '분기_코드', '아파트_평균_면적', '아파트_평균_시가',
       '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드', '시도명', '시군구', '법정동명']]
-아파트 = 아파트.loc[아파트['기준_년_코드'].isin([2019,2020,2021])]
+#아파트 = 아파트.loc[아파트['기준_년_코드'].isin([2019,2020,2021])]
 
 # 점포
 상권_점포_2019 = setup_tradehub('상권_점포_2019.csv')
@@ -73,14 +138,7 @@ df = pd.merge(df, 생활인구, how='left', on=['기준_년_코드','기준_분�
 df = pd.merge(df, 아파트, how='left', on=['기준_년_코드','기준_분기_코드','상권_코드','상권_코드_명','분기_코드',
                                        '엑스좌표_값', '와이좌표_값', '시군구_코드', '행정동_코드', '시도명', '시군구', '법정동명'])
 
-#==================================== PREPROCESS ====================================#
-def 아파트_전처리():
-    """
-    DESCRIPTION 1 : '상권_코드_명' 기준으로 '아파트_가격_*_억_세대_수'가 동일하게 '기준_년_코드'에 분배되지 않는것을 확인. (예 : 뱅뱅사거리)
-    DESCRIPTION 2 : '상권_코드_명'을 기준으로, '기준_년_코드'별 '아파트_평균_면적' 차액을 계산. 2014년부터 2020년까지 각 년도평 평균차액을 계산후, 9이상의 수치를 가진 '상권_코드_명'만을 개별적으로 처리.
-    DESCRIPTION 3 : 9이하의 수치를 가진 '상권_코드_명'의 데이터는 '아파트_평균_시가'가 년도별로 납득이 도니는 트렌드를 보이며 변화되었기에, 9이상의 수치를 기준으로 책정.
-    DESCRIPTION 4 : 9이상의  '상권_코드_명'를 필터후, 개별 코드의 '아파트_평균_면적'이 평균미달인 년도를 평균값으로 대입하여 수치 안정화.
-    """
+
 
 # null = df.isnull().sum()
 # null_시도 = df[df['시도'].isnull()]
